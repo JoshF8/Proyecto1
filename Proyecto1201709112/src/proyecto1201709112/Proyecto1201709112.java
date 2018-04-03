@@ -14,8 +14,11 @@ public class Proyecto1201709112 {
     /**
      * @param args the command line arguments
      */
+    
+    
     public static void main(String[] args) {
-        // TODO code application logic here
+        Logica.usuarios[0] = new Usuario("admin", "administrador", "admin", "password");
+        VentanaInicio ventana = new VentanaInicio();
     }
     
 }
