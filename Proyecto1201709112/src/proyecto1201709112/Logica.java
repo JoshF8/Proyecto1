@@ -5,6 +5,7 @@
  */
 package proyecto1201709112;
 
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
@@ -14,8 +15,9 @@ import javax.swing.JTextField;
  */
 public class Logica {
     
-    static Usuario usuarios[] = new Usuario[500];
-    static Usuario usuarioConectado;
+    public static Usuario usuarios[] = new Usuario[500];
+    public static Usuario usuarioConectado;
+    public static JFrame ventanas[] = new JFrame[4];
     
     public static boolean login(String nick, String password){
         for(int i = 0; i < usuarios.length; i++){
@@ -49,5 +51,18 @@ public class Logica {
         for(JTextField cuadro : cuadrosTexto){
             cuadro.setText("");
         }
+    }
+    
+    public static int buscarUltimoIndex(Object[] coleccion){
+        for(int i = 0; i < coleccion.length; i++){
+            if(coleccion[i] == null){
+                return i;
+            }
+        }
+        return -1;
+    }
+    
+    public static boolean comprobarMensaje(String mensaje, String titulo){
+        return (JOptionPane.showConfirmDialog(null, mensaje, titulo, JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE) == JOptionPane.YES_OPTION);
     }
 }

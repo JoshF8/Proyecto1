@@ -19,6 +19,7 @@ public class Proyecto1201709112 {
     public static void main(String[] args) {
         Logica.usuarios[0] = new Usuario("admin", "administrador", "admin", "password");
         VentanaInicio ventana = new VentanaInicio();
+        Logica.ventanas[0] = ventana;
     }
     
 }

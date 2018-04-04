@@ -23,7 +23,7 @@ public class VentanaInicio extends JFrame implements ActionListener{
     public VentanaInicio(){
         super("Inicio");
         this.setSize(360,260);
-        this.setLayout(null);
+        getContentPane().setLayout(null);
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.setLocationRelativeTo(null);
         JPanel panelTextos = new JPanel(new GridLayout(2,1, 20,20)), panelBotones = new JPanel(new GridLayout(1,2,20,20));
@@ -43,8 +43,8 @@ public class VentanaInicio extends JFrame implements ActionListener{
         panelBotones.add(aboutBoton);
         panelTextos.setBounds(20,20,310,100);
         panelBotones.setBounds(20,140,310,50);
-        this.add(panelTextos);
-        this.add(panelBotones);
+        getContentPane().add(panelTextos);
+        getContentPane().add(panelBotones);
         this.setVisible(true);
     }
     
@@ -60,9 +60,13 @@ public class VentanaInicio extends JFrame implements ActionListener{
                 if(Logica.comprobarLlenado(cuadrosTextos)){
                     if(Logica.login(cuadrosTextos[0].getText().trim(), cuadrosTextos[1].getText().trim())){
                         if(Logica.usuarioConectado.getTipo().equals("Admin")){
-                            //Ventana admin
+                            VentanaAdmin ventana = new VentanaAdmin();
+                            Logica.ventanas[1] = ventana;
+                            Logica.borrarTextos(cuadrosTextos);
+                            this.setVisible(false);
                         }else{
                             //Ventana cliente
+                            System.out.println("a");
                         }
                     }
                 }
