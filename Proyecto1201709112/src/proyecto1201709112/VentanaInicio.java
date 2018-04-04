@@ -65,8 +65,9 @@ public class VentanaInicio extends JFrame implements ActionListener{
                             Logica.borrarTextos(cuadrosTextos);
                             this.setVisible(false);
                         }else{
-                            //Ventana cliente
-                            System.out.println("a");
+                            Logica.ventanas[Logica.buscarUltimoIndex(Logica.ventanas)] = new VentanaUsuario();
+                            Logica.borrarTextos(cuadrosTextos);
+                            this.setVisible(false);
                         }
                     }
                 }

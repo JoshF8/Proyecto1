@@ -15,7 +15,6 @@ import java.awt.event.ActionListener;
 public class CuadroTextoUsuario extends JFrame implements ActionListener{
 
     JTextField cuadrosTexto[] = new JTextField[1];
-    private int indexUsuario = -1;
     public CuadroTextoUsuario(String tipo){
         super(tipo + " usuario");
         this.setSize(360,200);

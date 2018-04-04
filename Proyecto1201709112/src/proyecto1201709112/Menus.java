@@ -46,6 +46,7 @@ public class Menus extends JFrame implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {
         CuadroTextoUsuario ventanaCuadroTextoUsuario;
+        CuadroTextoBibliografia ventanaCuadroTextoBibliografia;
         switch(e.getActionCommand()){
             case "CrearUsuarios":
                 FormularioUsuario ventana = new FormularioUsuario();
@@ -70,6 +71,21 @@ public class Menus extends JFrame implements ActionListener{
             case "CrearBibliografías":
                 EleccionCarga eleccionCarga = new EleccionCarga();
                 Logica.ventanas[Logica.buscarUltimoIndex(Logica.ventanas)] = eleccionCarga;
+                this.setVisible(false);
+                break;
+            case "ModificarBibliografías":
+                ventanaCuadroTextoBibliografia = new CuadroTextoBibliografia("Modificar");
+                Logica.ventanas[Logica.buscarUltimoIndex(Logica.ventanas)] = ventanaCuadroTextoBibliografia;
+                this.setVisible(false);
+                break;
+            case "EliminarBibliografías":
+                ventanaCuadroTextoBibliografia = new CuadroTextoBibliografia("Eliminar");
+                Logica.ventanas[Logica.buscarUltimoIndex(Logica.ventanas)] = ventanaCuadroTextoBibliografia;
+                this.setVisible(false);
+                break;
+            case "MostrarBibliografías":
+                TablaBibliografias tablaB = new TablaBibliografias();
+                Logica.ventanas[Logica.buscarUltimoIndex(Logica.ventanas)] = tablaB;
                 this.setVisible(false);
                 break;
         }

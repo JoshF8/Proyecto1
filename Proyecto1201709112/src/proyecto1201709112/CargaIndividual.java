@@ -22,6 +22,7 @@ public class CargaIndividual extends JFrame implements ActionListener{
     JComboBox<String> cuadroSeleccion = new JComboBox<>();
     private String textoLabels[] = {"Autor", "Título", "Descripción", "Palabras Clave", "Edición", "Temas", "Frecuencia actual", "Ejemplares", "Área", "Copias", "Disponibles"};
     private boolean nuevo = true;
+    int index= -1;
     
     public CargaIndividual(){
         super("Carga de bibliografías");
@@ -55,6 +56,24 @@ public class CargaIndividual extends JFrame implements ActionListener{
         getContentPane().add(panelTextos);
         getContentPane().add(panelBotones);
         this.setVisible(true);
+    }
+    
+    public void llenarTextos(int index){
+        Bibliografia bibliografia = Logica.bibliografias[index];
+        cuadroSeleccion.setSelectedIndex(bibliografia.getTipo());
+        cuadrosTexto[0].setText(bibliografia.getAutor());
+        cuadrosTexto[1].setText(bibliografia.getTitulo());
+        cuadrosTexto[2].setText(bibliografia.getDescripcion());
+        cuadrosTexto[3].setText(bibliografia.getPalabrasClaveTexto());
+        cuadrosTexto[4].setText(String.valueOf(bibliografia.getEdicion()));
+        cuadrosTexto[5].setText(bibliografia.getTemasTexto());
+        cuadrosTexto[6].setText(bibliografia.getFrecuenciaActual());
+        cuadrosTexto[7].setText(String.valueOf(bibliografia.getEjemplares()));
+        cuadrosTexto[8].setText(bibliografia.getArea());
+        cuadrosTexto[9].setText(String.valueOf(bibliografia.getCopias()));
+        cuadrosTexto[10].setText(String.valueOf(bibliografia.getDisponibles()));
+        nuevo = false;
+        this.index = index;
     }
     
     private void cambiarTipo(int tipo){
@@ -110,11 +129,13 @@ public class CargaIndividual extends JFrame implements ActionListener{
         Bibliografia bibliografia = new Bibliografia(cuadroSeleccion.getSelectedIndex(), cuadrosTexto[0].getText().trim(), cuadrosTexto[1].getText().trim(), cuadrosTexto[2].getText().trim(), cuadrosTexto[3].getText().trim().split(","), Integer.valueOf(cuadrosTexto[4].getText().trim()), cuadrosTexto[5].getText().trim().split(","), cuadrosTexto[6].getText().trim(), Integer.valueOf(cuadrosTexto[7].getText().trim()), cuadrosTexto[8].getText().trim(), Integer.valueOf(cuadrosTexto[9].getText().trim()), Integer.valueOf(cuadrosTexto[10].getText().trim()));
         Logica.bibliografias[Logica.buscarUltimoIndex(Logica.bibliografias)] = bibliografia;
         JOptionPane.showMessageDialog(this, "Bibliografía guardada con éxito", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-        Logica.borrarTextos(cuadrosTexto);
+        dispose();
     }
     
     private void Editar(){
-    
+        Logica.bibliografias[index].editarDatos(cuadroSeleccion.getSelectedIndex(), cuadrosTexto[0].getText().trim(), cuadrosTexto[1].getText().trim(), cuadrosTexto[2].getText().trim(), cuadrosTexto[3].getText().trim().split(","), Integer.valueOf(cuadrosTexto[4].getText().trim()), cuadrosTexto[5].getText().trim().split(","), cuadrosTexto[6].getText().trim(), Integer.valueOf(cuadrosTexto[7].getText().trim()), cuadrosTexto[8].getText().trim(), Integer.valueOf(cuadrosTexto[9].getText().trim()), Integer.valueOf(cuadrosTexto[10].getText().trim()));
+        JOptionPane.showMessageDialog(this, "Bibliografía editada con éxito", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+        Logica.borrarTextos(cuadrosTexto);
     }
     
     @Override

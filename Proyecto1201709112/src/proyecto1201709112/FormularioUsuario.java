@@ -93,7 +93,7 @@ public class FormularioUsuario extends JFrame implements ActionListener{
         String rol = (cuadroSeleccion.getSelectedIndex() == 1) ? "Estudiante":"Catedrático";
         Logica.usuarios[index].editarDatos(cuadrosTexto[0].getText().trim(), cuadrosTexto[1].getText().trim(), cuadrosTexto[3].getText().trim(), cuadrosTexto[4].getText().trim(), rol, cuadrosTexto[2].getText().trim());
         JOptionPane.showMessageDialog(this, "Usuario editado con éxito", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-        Logica.borrarTextos(cuadrosTexto);
+        dispose();
     }
     
     private boolean comprobarErrores(){

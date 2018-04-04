@@ -31,7 +31,25 @@ public class Bibliografia {
         this.Disponibles = disponibles;
         ID = contador++;
     }
-
+    
+    public void editarDatos(int tipo, String autor, String titulo, String descripcion, String palabrasClave[],int edicion, String temas[], String frecuenciaActual, int ejemplares, String area, int copias, int disponibles){
+        this.Tipo = tipo;
+        this.Autor = autor;
+        this.Titulo = titulo;
+        this.Descripcion = descripcion;
+        this.PalabrasClave = palabrasClave;
+        this.Temas = temas;
+        if(getTipo() == 1){
+            this.FrecuenciaActual = frecuenciaActual;
+            this.Ejemplares = ejemplares;
+        }
+        if(getTipo() == 2){
+            this.Area = area;
+        }
+        this.Copias = copias;
+        this.Disponibles = disponibles;
+    }
+    
     public int getTipo() {
         return Tipo;
     }
