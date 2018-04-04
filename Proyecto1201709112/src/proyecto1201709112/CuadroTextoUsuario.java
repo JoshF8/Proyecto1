@@ -71,7 +71,9 @@ public class CuadroTextoUsuario extends JFrame implements ActionListener{
                     if(existeUsuario() != -1){
                         switch(e.getActionCommand()){
                             case "Eliminar":
-                                eliminarUsuario();
+                                if(Logica.comprobarMensaje("¿Desea eliminar a este usuario?", "")){
+                                    eliminarUsuario();
+                                }
                                 break;
                             case "Modificar":
                                 FormularioUsuario ventana = new FormularioUsuario();
