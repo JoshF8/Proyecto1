@@ -17,7 +17,7 @@ public class Logica {
     
     public static Usuario usuarios[] = new Usuario[500];
     public static Usuario usuarioConectado;
-    public static JFrame ventanas[] = new JFrame[4];
+    public static JFrame ventanas[] = new JFrame[10];
     
     public static boolean login(String nick, String password){
         for(int i = 0; i < usuarios.length; i++){

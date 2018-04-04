@@ -19,6 +19,7 @@ public class FormularioUsuario extends JFrame implements ActionListener{
     JTextField cuadrosTexto[] = new JTextField[6];
     JComboBox<String> cuadroSeleccion = new JComboBox<>();
     boolean nuevo = true;
+    int index = -1;
     
     public FormularioUsuario(){
         super("Formulario usuario");
@@ -55,6 +56,19 @@ public class FormularioUsuario extends JFrame implements ActionListener{
         this.setVisible(true);
     }
     
+    public void llenarTextos(int index){
+        Usuario usuario = Logica.usuarios[index];
+        cuadrosTexto[0].setText(usuario.getID());
+        cuadrosTexto[1].setText(usuario.getNombre());
+        cuadrosTexto[2].setText(usuario.getApellido());
+        cuadrosTexto[3].setText(usuario.getNickName());
+        cuadrosTexto[4].setText(usuario.getContra());
+        cuadrosTexto[5].setText(usuario.getContra());
+        cuadroSeleccion.setSelectedIndex((usuario.getRol().equals("Estudiante"))?1:2);
+        nuevo = false;
+        this.index = index;
+    }
+    
     private void Nuevo(){
         for(int i = 0; i < Logica.buscarUltimoIndex(Logica.usuarios); i++){
             if(Logica.usuarios[i].getID().equals(cuadrosTexto[0].getText().trim()) || Logica.usuarios[i].getNickName().equals(cuadrosTexto[3].getText().trim())){
@@ -66,6 +80,20 @@ public class FormularioUsuario extends JFrame implements ActionListener{
         Usuario usuario = new Usuario(cuadrosTexto[0].getText().trim(), cuadrosTexto[1].getText().trim(), cuadrosTexto[3].getText().trim(), cuadrosTexto[4].getText().trim(), rol, cuadrosTexto[2].getText().trim());
         Logica.usuarios[Logica.buscarUltimoIndex(Logica.usuarios)] = usuario;
         JOptionPane.showMessageDialog(this, "Usuario ingresado con éxito", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+        Logica.borrarTextos(cuadrosTexto);
+    }
+    
+    private void Editar(){
+        for(int i = 0; i < Logica.buscarUltimoIndex(Logica.usuarios); i++){
+            if((Logica.usuarios[i].getID().equals(cuadrosTexto[0].getText().trim()) || Logica.usuarios[i].getNickName().equals(cuadrosTexto[3].getText().trim())) && i != index){
+                JOptionPane.showMessageDialog(this, "Ya existe un usuario con ese CUI o Nickname.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        }
+        String rol = (cuadroSeleccion.getSelectedIndex() == 1) ? "Estudiante":"Catedrático";
+        Logica.usuarios[index].editarDatos(cuadrosTexto[0].getText().trim(), cuadrosTexto[1].getText().trim(), cuadrosTexto[3].getText().trim(), cuadrosTexto[4].getText().trim(), rol, cuadrosTexto[2].getText().trim());
+        JOptionPane.showMessageDialog(this, "Usuario editado con éxito", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+        Logica.borrarTextos(cuadrosTexto);
     }
     
     private boolean comprobarErrores(){
@@ -89,8 +117,8 @@ public class FormularioUsuario extends JFrame implements ActionListener{
     
     @Override
     public void dispose(){
-        Logica.ventanas[2].setVisible(true);
-        Logica.ventanas[3] = null;
+        Logica.ventanas[Logica.buscarUltimoIndex(Logica.ventanas) - 2].setVisible(true);
+        Logica.ventanas[Logica.buscarUltimoIndex(Logica.ventanas) - 1] = null;
         super.dispose();
     }
     
@@ -102,7 +130,7 @@ public class FormularioUsuario extends JFrame implements ActionListener{
                     if(nuevo){
                         Nuevo();
                     }else{
-                        
+                        Editar();
                     }
                 }else{
                     JOptionPane.showMessageDialog(this, "No ha ingresado los datos correctamente.", "Error", JOptionPane.ERROR_MESSAGE);

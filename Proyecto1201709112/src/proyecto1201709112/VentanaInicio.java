@@ -61,7 +61,7 @@ public class VentanaInicio extends JFrame implements ActionListener{
                     if(Logica.login(cuadrosTextos[0].getText().trim(), cuadrosTextos[1].getText().trim())){
                         if(Logica.usuarioConectado.getTipo().equals("Admin")){
                             VentanaAdmin ventana = new VentanaAdmin();
-                            Logica.ventanas[1] = ventana;
+                            Logica.ventanas[Logica.buscarUltimoIndex(Logica.ventanas)] = ventana;
                             Logica.borrarTextos(cuadrosTextos);
                             this.setVisible(false);
                         }else{

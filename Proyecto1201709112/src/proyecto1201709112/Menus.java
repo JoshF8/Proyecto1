@@ -38,17 +38,28 @@ public class Menus extends JFrame implements ActionListener{
     
     @Override
     public void dispose(){
-        Logica.ventanas[1].setVisible(true);
-        Logica.ventanas[2] = null;
+        Logica.ventanas[Logica.buscarUltimoIndex(Logica.ventanas) - 2].setVisible(true);
+        Logica.ventanas[Logica.buscarUltimoIndex(Logica.ventanas) - 1] = null;
         super.dispose();
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        CuadroTextoUsuario ventanaCuadroTextoUsuario;
         switch(e.getActionCommand()){
             case "CrearUsuarios":
                 FormularioUsuario ventana = new FormularioUsuario();
-                Logica.ventanas[3] = ventana;
+                Logica.ventanas[Logica.buscarUltimoIndex(Logica.ventanas)] = ventana;
+                this.setVisible(false);
+                break;
+            case "ModificarUsuarios":
+                ventanaCuadroTextoUsuario = new CuadroTextoUsuario("Modificar");
+                Logica.ventanas[Logica.buscarUltimoIndex(Logica.ventanas)] = ventanaCuadroTextoUsuario;
+                this.setVisible(false);
+                break;
+            case "EliminarUsuarios":
+                ventanaCuadroTextoUsuario = new CuadroTextoUsuario("Eliminar");
+                Logica.ventanas[Logica.buscarUltimoIndex(Logica.ventanas)] = ventanaCuadroTextoUsuario;
                 this.setVisible(false);
                 break;
         }

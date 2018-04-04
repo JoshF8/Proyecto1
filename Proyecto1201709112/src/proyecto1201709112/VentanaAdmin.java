@@ -38,8 +38,8 @@ public class VentanaAdmin extends JFrame implements ActionListener{
     @Override
     public void dispose(){
         if(Logica.comprobarMensaje("¿Desea cerrar sesión?", "Salir")){
-            Logica.ventanas[0].setVisible(true);
-            Logica.ventanas[1] = null;
+            Logica.ventanas[Logica.buscarUltimoIndex(Logica.ventanas) - 2].setVisible(true);
+            Logica.ventanas[Logica.buscarUltimoIndex(Logica.ventanas) - 1] = null;
             super.dispose();
         }
     }
@@ -50,12 +50,12 @@ public class VentanaAdmin extends JFrame implements ActionListener{
         switch(e.getActionCommand()){
             case "Menú usuarios":
                 ventana = new Menus("Usuarios");
-                Logica.ventanas[2] = ventana;
+                Logica.ventanas[Logica.buscarUltimoIndex(Logica.ventanas)] = ventana;
                 this.setVisible(false);
                 break;
             case "Menú Bibliografías":
                 ventana = new Menus("Bibliografías");
-                Logica.ventanas[2] = ventana;
+                Logica.ventanas[Logica.buscarUltimoIndex(Logica.ventanas)] = ventana;
                 this.setVisible(false);
                 break;
             case "Salir":
