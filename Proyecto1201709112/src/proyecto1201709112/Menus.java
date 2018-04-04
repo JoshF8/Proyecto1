@@ -67,6 +67,11 @@ public class Menus extends JFrame implements ActionListener{
                 Logica.ventanas[Logica.buscarUltimoIndex(Logica.ventanas)] = tabla;
                 this.setVisible(false);
                 break;
+            case "CrearBibliografías":
+                EleccionCarga eleccionCarga = new EleccionCarga();
+                Logica.ventanas[Logica.buscarUltimoIndex(Logica.ventanas)] = eleccionCarga;
+                this.setVisible(false);
+                break;
         }
     }
 }

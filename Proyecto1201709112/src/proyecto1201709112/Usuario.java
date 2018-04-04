@@ -11,6 +11,7 @@ package proyecto1201709112;
  */
 public class Usuario {
     private String ID, Nombre, NickName, Contra, Rol, Apellido, Tipo;
+    public Bibliografia favoritos[] = new Bibliografia[500];
     
     public Usuario(String id, String nombre, String nickName, String contra){
         this.ID = id;
