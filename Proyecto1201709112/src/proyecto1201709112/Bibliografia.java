@@ -118,7 +118,7 @@ public class Bibliografia {
     public String getPalabrasClaveTexto(){
         String texto = "";
         try{
-            texto = Temas[0];
+            texto = PalabrasClave[0];
             for(int i = 1; i < PalabrasClave.length; i++){
                 texto += ", " + PalabrasClave[i];
             }
@@ -134,5 +134,26 @@ public class Bibliografia {
 
     public int getVecesPrestado() {
         return vecesPrestado;
+    }
+    
+    public void prestar(){
+        this.Disponibles--;
+        Prestamo prestamo = new Prestamo(this);
+        Logica.usuarioConectado.prestamos[Logica.buscarUltimoIndex(Logica.usuarioConectado.prestamos)] = prestamo;
+        Logica.prestamos[Logica.buscarUltimoIndex(Logica.prestamos)] = prestamo;
+    }
+    
+    public void devolver(Prestamo prestamo){
+        this.Disponibles++;
+        int valor = 0;
+        for(int i = 0; i < Logica.buscarUltimoIndex(Logica.usuarioConectado.prestamos); i++){
+            if(Logica.usuarioConectado.prestamos[i] == prestamo){
+                valor = 1;
+            }else{
+                Logica.usuarioConectado.prestamos[i - valor] = Logica.usuarioConectado.prestamos[i];
+            }
+            
+        }
+        Logica.usuarioConectado.prestamos[Logica.buscarUltimoIndex(Logica.usuarioConectado.prestamos) - 1] = null;
     }
 }

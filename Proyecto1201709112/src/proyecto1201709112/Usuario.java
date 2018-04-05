@@ -12,7 +12,7 @@ package proyecto1201709112;
 public class Usuario {
     private String ID, Nombre, NickName, Contra, Rol, Apellido, Tipo;
     public Bibliografia favoritos[] = new Bibliografia[500];
-    
+    public Prestamo prestamos[] = new Prestamo[1000];
     public Usuario(String id, String nombre, String nickName, String contra){
         this.ID = id;
         this.Nombre = nombre;
@@ -68,6 +68,17 @@ public class Usuario {
         return Tipo;
     }
     
-    
+    public void eliminarFavorito(int ID){
+        int contador = 0;
+        for(Bibliografia bibliografia : favoritos){
+            if(bibliografia == null){
+                break;
+            }
+            if(bibliografia.getID() != ID){
+                favoritos[contador++] = bibliografia;
+            }
+        }
+        favoritos[contador] = null;
+    }
     
 }

@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
@@ -18,49 +19,66 @@ import javax.swing.table.TableRowSorter;
  *
  * @author Josh
  */
-public class VentanaUsuario extends JFrame implements ActionListener{
-    JTextField cuadrosTexto[] = new JTextField[2];
+public class BibliotecaUsuario extends JFrame implements ActionListener{
+
+    JTextField cuadrosTexto[] = new JTextField[1];
     private JTable tabla;
     private TableRowSorter<TableModel> Sorter;
+    JComboBox<String> cuadroSeleccion = new JComboBox<String>();
+    private int columnaOrdenar = 11, item = 0;
     
-    public VentanaUsuario(){
-        super("Bibliografías");
-        this.setSize(1000,400);
+    
+    public BibliotecaUsuario(){
+        super("Mis favoritos");
+        this.setSize(1300,400);
         getContentPane().setLayout(null);
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.setLocationRelativeTo(null);
         llenarTabla();
-        
+        tabla.setEnabled(true);
+        tabla.setRowHeight(30);
+        tabla.setRowSelectionAllowed(true);
+        tabla.setColumnSelectionAllowed(false);
+        tabla.getTableHeader().setEnabled(false);
+        Sorter = new TableRowSorter<TableModel>(tabla.getModel());
+        tabla.setRowSorter(Sorter);
+        Sorter.toggleSortOrder(11);
+        Sorter.toggleSortOrder(11);
         JScrollPane tablaPanel = new JScrollPane();
         tablaPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         tablaPanel.setViewportView(tabla);
-        tablaPanel.setBounds(20,110, 960,220);
-        JButton buscarBoton = new JButton("Buscar"), bibliotecaBoton = new JButton("Mi biblioteca"),salirBoton = new JButton("Salir");
+        tablaPanel.setBounds(20,110, 1250,220);
+        JButton buscarBoton = new JButton("Buscar"), prestamosBoton = new JButton("Mis préstamos");
         cuadrosTexto[0] = new JTextField();
-        cuadrosTexto[1] = new JTextField();
-        TextPrompt holder0 = new TextPrompt("Título", cuadrosTexto[0]), holder1 = new TextPrompt("Autor", cuadrosTexto[1]);
+        TextPrompt holder0 = new TextPrompt("Palabras clave", cuadrosTexto[0]);
         holder0.changeAlpha(0.8f);
-        holder1.changeAlpha(0.8f);
         buscarBoton.addActionListener(this);
-        bibliotecaBoton.addActionListener(this);
-        salirBoton.addActionListener(this);
-        buscarBoton.setBounds(20, 30, 150, 30);
-        cuadrosTexto[0].setBounds(200,30,200,30);
-        cuadrosTexto[1].setBounds(430,30,200,30);
-        bibliotecaBoton.setBounds(650,30,150,30);
-        salirBoton.setBounds(830, 30, 150, 30);
+        prestamosBoton.addActionListener(this);
+        buscarBoton.setBounds(640, 30, 150, 30);
+        cuadrosTexto[0].setBounds(350,30,200,30);
+        prestamosBoton.setBounds(1100,30,150,30);
         getContentPane().add(tablaPanel);
         getContentPane().add(buscarBoton);
         getContentPane().add(cuadrosTexto[0]);
-        getContentPane().add(cuadrosTexto[1]);
-        getContentPane().add(bibliotecaBoton);
-        getContentPane().add(salirBoton);
+        columnaOrdenar = 11;
+        cuadroSeleccion.addItem("Copias (Mayor a menor)");
+        cuadroSeleccion.addItem("Disponibles (Mayor a menor)");
+        cuadroSeleccion.addItem("Tipo (Ascendente)");
+        cuadroSeleccion.addItem("Tipo (Descendente)");
+        cuadroSeleccion.setActionCommand("CambioOrdenMostrarBibliografía");
+        cuadroSeleccion.addActionListener(this);
+        cuadroSeleccion.setBounds(100, 30, 200, 30);
+        JLabel texto = new JLabel("Ordenar por:");
+        texto.setBounds(20, 30, 200,30);
+        getContentPane().add(cuadroSeleccion);
+        getContentPane().add(texto);
+        getContentPane().add(prestamosBoton);
         this.setVisible(true);
     }
     
     public void llenarTabla(){
     String columnas[] = {"ID","Tipo", "Autor", "Título", "Descripción", "Palabras Clave", "Edición", "Temas", "Frecuencia actual", "Ejemplares", "Área", "Copias", "Disponibles", "Agregar"};
-        Bibliografia bibliografias[] = Logica.bibliografias;
+        Bibliografia bibliografias[] = Logica.usuarioConectado.favoritos;
         Object datosTabla[][] = new Object[Logica.buscarUltimoIndex(bibliografias)][columnas.length];
         JButton botones[] = new JButton[Logica.buscarUltimoIndex(bibliografias)];
         for(int i = 0; i < Logica.buscarUltimoIndex(bibliografias); i++){
@@ -77,15 +95,7 @@ public class VentanaUsuario extends JFrame implements ActionListener{
             datosTabla[i][10] = bibliografias[i].getArea();
             datosTabla[i][11] = bibliografias[i].getCopias();
             datosTabla[i][12] = bibliografias[i].getDisponibles();
-            String texto = "+";
-            for(Bibliografia favorito:Logica.usuarioConectado.favoritos){
-                if(favorito == null){
-                    break;
-                }
-                if(favorito.getID() == bibliografias[i].getID()){
-                    texto = "-";
-                }
-            }
+            String texto = "Prestar";
             botones[i] = new JButton(texto);
             datosTabla[i][13] = botones[i];
         }
@@ -132,21 +142,13 @@ public class VentanaUsuario extends JFrame implements ActionListener{
                 if(modeloTabla.getColumnClass(columna).equals(JButton.class)){
                     JButton boton = (JButton)modeloTabla.getValueAt(fila, 13);
                     Number numero = (Number)tabla.getValueAt(fila, 0);
-                    accion(boton.getText(), numero.intValue(), fila);
+                    accion(numero.intValue(), fila);
                 }
             }
         });
-        tabla.setEnabled(true);
-        tabla.setRowHeight(30);
-        tabla.setRowSelectionAllowed(true);
-        tabla.setColumnSelectionAllowed(false);
-        tabla.getTableHeader().setEnabled(false);
-        Sorter = new TableRowSorter<TableModel>(tabla.getModel());
-        tabla.setRowSorter(Sorter);
-        Sorter.toggleSortOrder(0);
     }
     
-    private void accion(String textoBoton, int ID, int fila){
+    private void accion(int ID, int fila){
         Bibliografia bibliografia = null;
         for(Bibliografia bibliografia1 : Logica.bibliografias){
             if(bibliografia1 == null){
@@ -156,47 +158,76 @@ public class VentanaUsuario extends JFrame implements ActionListener{
                 bibliografia = bibliografia1;
             }
         }
-        if(bibliografia != null){
-            JButton boton;
-            switch(textoBoton){
-                case "+":
-                    boton = new JButton("-");
-                    Logica.usuarioConectado.favoritos[Logica.buscarUltimoIndex(Logica.usuarioConectado.favoritos)] = bibliografia;
-                    tabla.setValueAt(boton, fila, 13);
-                    break;
-                case "-":
-                    boton = new JButton("+");
-                    Logica.usuarioConectado.eliminarFavorito(ID);
-                    tabla.setValueAt(boton, fila, 13);
-                    break;
-            }
+        if(bibliografia.getDisponibles() > 0){
+            bibliografia.prestar();
+            tabla.setValueAt(Integer.valueOf(tabla.getValueAt(fila, 12).toString()) - 1, fila, 12);
         }
     }
+    
+    private void ordenarMostrarBiblio(){
+        if(cuadroSeleccion.getSelectedIndex() != item){
+            switch(cuadroSeleccion.getSelectedIndex()){
+                case 0:
+                    tabla.getRowSorter().toggleSortOrder(11);
+                    tabla.getRowSorter().toggleSortOrder(11);
+                    break;
+                case 1:
+                    tabla.getRowSorter().toggleSortOrder(12);
+                    tabla.getRowSorter().toggleSortOrder(12);
+                    break;
+                case 2:
+                    tabla.getRowSorter().toggleSortOrder(1);
+                    break;
+                case 3:
+                    if(item != 2){
+                        tabla.getRowSorter().toggleSortOrder(1);
+                    }
+                    tabla.getRowSorter().toggleSortOrder(1);
+                    break;
+            }
+            item = cuadroSeleccion.getSelectedIndex();
+        }
+    }
+    
 
     @Override
     public void dispose(){
-        if(Logica.comprobarMensaje("¿Desea cerrar sesión?", "Salir")){
-            Logica.ventanas[Logica.buscarUltimoIndex(Logica.ventanas) - 2].setVisible(true);
-            Logica.ventanas[Logica.buscarUltimoIndex(Logica.ventanas) - 1] = null;
-            super.dispose();
-        }
+        Logica.ventanas[Logica.buscarUltimoIndex(Logica.ventanas) - 2].setVisible(true);
+        Logica.ventanas[Logica.buscarUltimoIndex(Logica.ventanas) - 1] = null;
+        super.dispose();
     }
     
     @Override
     public void actionPerformed(ActionEvent e) {
         switch(e.getActionCommand()){
+            case "CambioOrdenMostrarBibliografía":
+                ordenarMostrarBiblio();
+                break;
             case "Buscar":
                 RowFilter filtrador = new RowFilter() {
                     @Override
                     public boolean include(RowFilter.Entry entry) {
-                        return (entry.getValue(3).toString().toUpperCase().contains(cuadrosTexto[0].getText().trim().toUpperCase()) && entry.getValue(2).toString().toUpperCase().contains(cuadrosTexto[1].getText().trim().toUpperCase()));
+                        String palabrasClaveBuscar[] = cuadrosTexto[0].getText().split(","), palabrasClave[] = entry.getStringValue(5).split(",");
+                        boolean palabraClaveExistente = false;
+                        if(!cuadrosTexto[0].getText().trim().equals("")){
+                            for(int i = 0; i < palabrasClaveBuscar.length; i++){
+                                for(int j = 0; j < palabrasClave.length; j++){
+                                    if(palabrasClave[j].trim().toUpperCase().contains(palabrasClaveBuscar[i].trim().toUpperCase())){
+                                        palabraClaveExistente = true;
+                                    }
+                                }
+                            }
+                        }else{
+                            palabraClaveExistente = true;
+                        }
+                        return palabraClaveExistente;
                     }
+                    
                 };
                 Sorter.setRowFilter(filtrador);
                 break;
-            case "Mi biblioteca":
-                Logica.ventanas[Logica.buscarUltimoIndex(Logica.ventanas)] = new BibliotecaUsuario();
-                Logica.ventanas[Logica.buscarUltimoIndex(Logica.ventanas) - 1].setVisible(true);
+            case "Mis préstamos":
+                Logica.ventanas[Logica.buscarUltimoIndex(Logica.ventanas)] = new PrestamosUsuario();
                 this.setVisible(false);
                 break;
             case "Salir":
@@ -204,4 +235,5 @@ public class VentanaUsuario extends JFrame implements ActionListener{
                 break;
         }
     }
+    
 }
