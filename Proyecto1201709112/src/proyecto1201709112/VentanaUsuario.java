@@ -20,7 +20,7 @@ import javax.swing.table.TableRowSorter;
  */
 public class VentanaUsuario extends JFrame implements ActionListener{
     JTextField cuadrosTexto[] = new JTextField[2];
-    private JTable tabla;
+    public JTable tabla = new JTable();
     private TableRowSorter<TableModel> Sorter;
     
     public VentanaUsuario(){
@@ -30,7 +30,6 @@ public class VentanaUsuario extends JFrame implements ActionListener{
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.setLocationRelativeTo(null);
         llenarTabla();
-        
         JScrollPane tablaPanel = new JScrollPane();
         tablaPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         tablaPanel.setViewportView(tabla);
@@ -122,7 +121,7 @@ public class VentanaUsuario extends JFrame implements ActionListener{
                 return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
             }
         };
-        tabla = new JTable(modeloTabla);
+        tabla.setModel(modeloTabla);
         tabla.setDefaultRenderer(Object.class, render);
         tabla.addMouseListener(new MouseAdapter(){
             @Override

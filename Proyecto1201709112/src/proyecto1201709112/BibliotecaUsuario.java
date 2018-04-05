@@ -22,7 +22,7 @@ import javax.swing.table.TableRowSorter;
 public class BibliotecaUsuario extends JFrame implements ActionListener{
 
     JTextField cuadrosTexto[] = new JTextField[1];
-    private JTable tabla;
+    public JTable tabla = new JTable();
     private TableRowSorter<TableModel> Sorter;
     JComboBox<String> cuadroSeleccion = new JComboBox<String>();
     private int columnaOrdenar = 11, item = 0;
@@ -35,15 +35,6 @@ public class BibliotecaUsuario extends JFrame implements ActionListener{
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.setLocationRelativeTo(null);
         llenarTabla();
-        tabla.setEnabled(true);
-        tabla.setRowHeight(30);
-        tabla.setRowSelectionAllowed(true);
-        tabla.setColumnSelectionAllowed(false);
-        tabla.getTableHeader().setEnabled(false);
-        Sorter = new TableRowSorter<TableModel>(tabla.getModel());
-        tabla.setRowSorter(Sorter);
-        Sorter.toggleSortOrder(11);
-        Sorter.toggleSortOrder(11);
         JScrollPane tablaPanel = new JScrollPane();
         tablaPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         tablaPanel.setViewportView(tabla);
@@ -132,7 +123,7 @@ public class BibliotecaUsuario extends JFrame implements ActionListener{
                 return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
             }
         };
-        tabla = new JTable(modeloTabla);
+        tabla.setModel(modeloTabla);
         tabla.setDefaultRenderer(Object.class, render);
         tabla.addMouseListener(new MouseAdapter(){
             @Override
@@ -146,6 +137,15 @@ public class BibliotecaUsuario extends JFrame implements ActionListener{
                 }
             }
         });
+        tabla.setEnabled(true);
+        tabla.setRowHeight(30);
+        tabla.setRowSelectionAllowed(true);
+        tabla.setColumnSelectionAllowed(false);
+        tabla.getTableHeader().setEnabled(false);
+        Sorter = new TableRowSorter<TableModel>(tabla.getModel());
+        tabla.setRowSorter(Sorter);
+        Sorter.toggleSortOrder(11);
+        Sorter.toggleSortOrder(11);
     }
     
     private void accion(int ID, int fila){
@@ -160,7 +160,7 @@ public class BibliotecaUsuario extends JFrame implements ActionListener{
         }
         if(bibliografia.getDisponibles() > 0){
             bibliografia.prestar();
-            tabla.setValueAt(Integer.valueOf(tabla.getValueAt(fila, 12).toString()) - 1, fila, 12);
+            llenarTabla();
         }
     }
     

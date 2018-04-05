@@ -20,7 +20,7 @@ import javax.swing.table.TableRowSorter;
  * @author Josh
  */
 public class PrestamosUsuario extends JFrame{
-     private JTable tabla;
+     private JTable tabla = new JTable();
     private TableRowSorter<TableModel> Sorter;
     
     public PrestamosUsuario(){
@@ -30,13 +30,6 @@ public class PrestamosUsuario extends JFrame{
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.setLocationRelativeTo(null);
         llenarTabla();
-        tabla.setEnabled(true);
-        tabla.setRowHeight(30);
-        tabla.setRowSelectionAllowed(true);
-        tabla.setColumnSelectionAllowed(false);
-        tabla.getTableHeader().setEnabled(false);
-        Sorter = new TableRowSorter<TableModel>(tabla.getModel());
-        tabla.setRowSorter(Sorter);
         JScrollPane tablaPanel = new JScrollPane();
         tablaPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         tablaPanel.setViewportView(tabla);
@@ -91,7 +84,7 @@ public class PrestamosUsuario extends JFrame{
                 return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
             }
         };
-        tabla = new JTable(modeloTabla);
+        tabla.setModel(modeloTabla);
         tabla.setDefaultRenderer(Object.class, render);
         tabla.addMouseListener(new MouseAdapter(){
             @Override
@@ -104,6 +97,13 @@ public class PrestamosUsuario extends JFrame{
                 }
             }
         });
+        tabla.setEnabled(true);
+        tabla.setRowHeight(30);
+        tabla.setRowSelectionAllowed(true);
+        tabla.setColumnSelectionAllowed(false);
+        tabla.getTableHeader().setEnabled(false);
+        Sorter = new TableRowSorter<TableModel>(tabla.getModel());
+        tabla.setRowSorter(Sorter);
     }
     
     private void accion(int ID){
@@ -111,7 +111,7 @@ public class PrestamosUsuario extends JFrame{
             for(int i = 0; i < Logica.buscarUltimoIndex(Logica.usuarioConectado.prestamos); i++){
                 if(Logica.usuarioConectado.prestamos[i].getID() == ID){
                     Logica.usuarioConectado.prestamos[i].getBibliografia().devolver(Logica.usuarioConectado.prestamos[i]);
-                    dispose();
+                    llenarTabla();
                 }
             }
         }
@@ -119,6 +119,8 @@ public class PrestamosUsuario extends JFrame{
 
     @Override
     public void dispose(){
+        BibliotecaUsuario ventana = (BibliotecaUsuario)Logica.ventanas[Logica.buscarUltimoIndex(Logica.ventanas) - 2];
+        ventana.llenarTabla();
         Logica.ventanas[Logica.buscarUltimoIndex(Logica.ventanas) - 2].setVisible(true);
         Logica.ventanas[Logica.buscarUltimoIndex(Logica.ventanas) - 1] = null;
         super.dispose();
